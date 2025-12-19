@@ -1,0 +1,257 @@
+/* 信息显示模块 - 统一样式 */
+
+/* 通用信息容器样式 */
+.info-container {
+    position: fixed;
+    height: 32px;
+    background: rgba(20, 24, 36, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid #0080ff;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 12px;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(0, 128, 255, 0.6);
+    clip-path: polygon(
+        0 4px, 4px 0,
+        calc(100% - 4px) 0, 100% 4px,
+        100% calc(100% - 4px), calc(100% - 4px) 100%,
+        4px 100%, 0 calc(100% - 4px)
+    );
+}
+
+/* 左上角时间组 */
+.datetime-group {
+    top: 16px;
+    left: 16px;
+}
+
+/* 右上角信息条 */
+.top-info-bar {
+    top: 16px;
+    right: 16px;
+}
+
+/* 左下角更新信息 */
+.update-info {
+    bottom: 16px;
+    left: 16px;
+}
+
+/* 信息项通用样式 */
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* 信息标签 - 右上角通用样式 */
+.info-label {
+    color: #8b9dc4;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 11px;
+}
+
+/* 信息值 - 右上角通用样式 */
+.info-value {
+    color: #00ccff;
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(0, 204, 255, 0.6);
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+}
+
+/* 左上角时间特殊样式 */
+.time-value {
+    color: #00ccff;
+    font-size: 16px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(0, 204, 255, 0.8);
+}
+
+/* 更新信息文本 */
+.update-text {
+    color: #8b9dc4;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+/* 分隔线 */
+.info-divider {
+    width: 1px;
+    height: 16px;
+    background: linear-gradient(180deg, transparent, #0080ff, transparent);
+    flex-shrink: 0;
+}
+
+/* 状态点 */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #00ffcc;
+    box-shadow: 0 0 10px #00ffcc;
+    animation: pulse-neon 2s infinite;
+    margin-left: 6px;
+    flex-shrink: 0;
+}
+
+.status-dot.disconnected {
+    background: #ff0080;
+    box-shadow: 0 0 10px #ff0080;
+    animation: blink 1s infinite;
+}
+
+/* 动画效果 */
+@keyframes pulse-neon {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px #00ffcc; }
+    50% { opacity: 0.6; box-shadow: 0 0 15px #00ffcc; }
+}
+
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0.3; }
+}
+
+/* 扫描线效果 - 所有容器共享 */
+.info-container::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00ccff, transparent);
+    top: 50%;
+    animation: horizontalScan 4s linear infinite;
+    opacity: 0.5;
+}
+
+@keyframes horizontalScan {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .info-container {
+        height: 28px;
+        padding: 0 12px;
+        gap: 10px;
+    }
+    
+    .datetime-group,
+    .top-info-bar {
+        top: 10px;
+    }
+    
+    .datetime-group {
+        left: 10px;
+    }
+    
+    .top-info-bar {
+        right: 10px;
+    }
+    
+    .update-info {
+        bottom: 10px;
+        left: 10px;
+    }
+    
+    .info-item {
+        font-size: 11px;
+        gap: 6px;
+    }
+    
+    .info-label {
+        font-size: 10px;
+    }
+    
+    .info-value {
+        font-size: 13px;
+    }
+    
+    .time-value {
+        font-size: 14px;
+    }
+    
+    .update-text {
+        font-size: 10px;
+    }
+    
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        margin-left: 5px;
+    }
+    
+    .info-divider {
+        height: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .info-container {
+        height: 26px;
+        padding: 0 10px;
+        gap: 8px;
+    }
+    
+    .datetime-group,
+    .top-info-bar,
+    .update-info {
+        left: 8px;
+        right: auto;
+    }
+    
+    .datetime-group,
+    .top-info-bar {
+        top: 8px;
+    }
+    
+    .top-info-bar {
+        left: auto;
+        right: 8px;
+    }
+    
+    .update-info {
+        bottom: 8px;
+    }
+    
+    .info-item {
+        font-size: 10px;
+        gap: 5px;
+    }
+    
+    .info-label {
+        font-size: 9px;
+    }
+    
+    .info-value {
+        font-size: 12px;
+    }
+    
+    .time-value {
+        font-size: 13px;
+        letter-spacing: 1px;
+    }
+    
+    .update-text {
+        font-size: 9px;
+    }
+    
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        margin-left: 4px;
+    }
+    
+    .info-divider {
+        height: 12px;
+    }
+}

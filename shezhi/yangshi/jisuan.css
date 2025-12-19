@@ -1,0 +1,266 @@
+/* 公式输入区域 - 蓝色朋克风格（最新完整版） */
+.shezhi-formula {
+    flex: 1;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* 背景网格 */
+.shezhi-formula::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(rgba(0, 204, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 204, 255, 0.02) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 公式输入框 */
+#formulaInput {
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    padding-right: 60px; /* 为按钮留出空间 */
+    padding-bottom: 60px; /* 为按钮留出空间 */
+    border: 1px solid #0080ff;
+    border-radius: 0;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    background: rgba(10, 14, 26, 0.9);
+    color: #00ccff;
+    transition: all 0.3s ease;
+    box-shadow: 
+        inset 0 0 20px rgba(0, 128, 255, 0.1),
+        0 0 10px rgba(0, 128, 255, 0.3);
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 2px rgba(0, 204, 255, 0.5);
+}
+
+/* 只读状态 */
+#formulaInput[readonly] {
+    background: rgba(10, 14, 26, 0.7);
+    color: #6b7c9b;
+    border-color: #3d4a63;
+    cursor: not-allowed;
+    text-shadow: none;
+}
+
+/* 编辑状态 */
+#formulaInput.editing {
+    border-color: #00ffcc;
+    background: rgba(10, 14, 26, 0.95);
+    color: #00ffcc;
+    box-shadow: 
+        inset 0 0 30px rgba(0, 255, 204, 0.1),
+        0 0 20px rgba(0, 255, 204, 0.4),
+        0 0 2px #00ffcc;
+}
+
+#formulaInput:hover:not([readonly]) {
+    border-color: #00ccff;
+    box-shadow: 
+        inset 0 0 25px rgba(0, 204, 255, 0.1),
+        0 0 15px rgba(0, 204, 255, 0.3);
+}
+
+#formulaInput::placeholder {
+    color: #3d4a63;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+#formulaInput::selection {
+    background: rgba(0, 255, 204, 0.3);
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(0, 255, 204, 0.8);
+}
+
+#formulaInput {
+    caret-color: #00ffcc;
+}
+
+/* 图标按钮 - 通用样式 */
+.formula-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 28px;
+    height: 28px;
+    background: rgba(0, 128, 255, 0.2);
+    border: 1px solid #0080ff;
+    color: #00ccff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(
+        0 6px, 6px 0,
+        calc(100% - 6px) 0, 100% 6px,
+        100% calc(100% - 6px), calc(100% - 6px) 100%,
+        6px 100%, 0 calc(100% - 6px)
+    );
+}
+
+/* 上传按钮位置和样式 */
+.formula-btn.upload-btn {
+    bottom: 56px; /* 编辑按钮上方 */
+    background: rgba(0, 128, 255, 0.15);
+    border-color: #0080ff;
+    color: #00ccff;
+}
+
+.formula-btn.upload-btn:hover {
+    background: rgba(0, 128, 255, 0.3);
+    border-color: #00ccff;
+    color: #ffffff;
+    box-shadow: 
+        0 0 20px rgba(0, 204, 255, 0.5),
+        inset 0 0 10px rgba(0, 204, 255, 0.2);
+}
+
+/* 编辑模式图标样式 */
+.formula-btn:not(.save-mode):not(.upload-btn) {
+    background: rgba(0, 128, 255, 0.15);
+    border-color: #0080ff;
+    color: #00ccff;
+}
+
+.formula-btn:not(.save-mode):not(.upload-btn):hover {
+    background: rgba(0, 128, 255, 0.3);
+    border-color: #00ccff;
+    color: #ffffff;
+    box-shadow: 
+        0 0 20px rgba(0, 204, 255, 0.5),
+        inset 0 0 10px rgba(0, 204, 255, 0.2);
+}
+
+/* 保存模式图标样式 */
+.formula-btn.save-mode {
+    background: rgba(0, 255, 204, 0.2);
+    border-color: #00ffcc;
+    color: #00ffcc;
+    animation: pulseSave 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseSave {
+    0%, 100% {
+        box-shadow: 
+            0 0 10px rgba(0, 255, 204, 0.4),
+            inset 0 0 5px rgba(0, 255, 204, 0.1);
+    }
+    50% {
+        box-shadow: 
+            0 0 20px rgba(0, 255, 204, 0.6),
+            inset 0 0 10px rgba(0, 255, 204, 0.2);
+    }
+}
+
+.formula-btn.save-mode:hover {
+    background: rgba(0, 255, 204, 0.35);
+    border-color: #00ffcc;
+    color: #ffffff;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 204, 0.8),
+        inset 0 0 15px rgba(0, 255, 204, 0.3);
+    animation: none;
+}
+
+/* 禁用状态 */
+.formula-btn:disabled {
+    background: rgba(42, 52, 71, 0.3);
+    border-color: #3d4a63;
+    color: #6b7c9b;
+    cursor: not-allowed;
+    opacity: 0.5;
+    box-shadow: none;
+    animation: none;
+}
+
+/* 滚动条 */
+#formulaInput::-webkit-scrollbar {
+    width: 6px;
+}
+
+#formulaInput::-webkit-scrollbar-track {
+    background: #141824;
+    border: 1px solid #2a3447;
+}
+
+#formulaInput::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #0080ff 0%, #00ccff 100%);
+    border-radius: 0;
+    box-shadow: 0 0 5px rgba(0, 204, 255, 0.5);
+}
+
+#formulaInput::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #00ccff 0%, #00ffcc 100%);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .shezhi-formula {
+        padding: 10px;
+    }
+    
+    #formulaInput {
+        padding: 10px;
+        padding-right: 50px;
+        padding-bottom: 50px;
+        font-size: 13px;
+    }
+    
+    .formula-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .formula-btn.upload-btn {
+        bottom: 45px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shezhi-formula {
+        padding: 8px;
+    }
+    
+    #formulaInput {
+        padding: 8px;
+        padding-right: 45px;
+        padding-bottom: 45px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+    
+    .formula-btn {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+        bottom: 12px;
+        right: 12px;
+    }
+    
+    .formula-btn.upload-btn {
+        bottom: 38px;
+    }
+}

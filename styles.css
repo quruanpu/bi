@@ -1,0 +1,400 @@
+:root {
+    /* 蓝色朋克色系 - 赛博霓虹主题 */
+    --primary: #0080ff;        /* 电光蓝 */
+    --success: #00ffcc;        /* 青绿霓虹 */
+    --danger: #ff0080;         /* 霓虹粉 */
+    --warning: #ffcc00;        /* 金黄霓虹 */
+    --info: #00ccff;           /* 冰蓝 */
+    
+    /* 深色背景系 */
+    --gray-50: #1a1f2e;        /* 深空蓝 */
+    --gray-100: #141824;       /* 深夜蓝 */
+    --gray-200: #2a3447;       /* 暗蓝 */
+    --gray-300: #3d4a63;       /* 钢蓝 */
+    --gray-600: #6b7c9b;       /* 灰蓝 */
+    --gray-700: #8b9dc4;       /* 浅钢蓝 */
+    --gray-800: #c4d4e8;       /* 亮蓝白 - 调亮 */
+    --gray-900: #e0e8f5;       /* 极浅蓝 */
+    --white: #ffffff;
+    
+    /* 霓虹发光 */
+    --glow-blue: 0 0 20px rgba(0, 128, 255, 0.6);
+    --glow-cyan: 0 0 20px rgba(0, 255, 204, 0.6);
+    --glow-pink: 0 0 20px rgba(255, 0, 128, 0.6);
+    
+    /* 背景渐变 */
+    --bg-gradient: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 50%, #0f1923 100%);
+    
+    /* 背景图片 - 唯一定义位置 */
+    --bg-image: url("beijing.png");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Orbitron', 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 背景图片层 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--bg-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -2;
+    pointer-events: none;
+}
+
+/* 背景遮罩层 */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 14, 26, 0.3);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* 主容器 */
+.main-container {
+    width: calc(100vw - 60px);
+    height: calc(100vh - 100px);
+    max-width: 1200px;
+    max-height: 550px;
+    min-width: 800px;
+    min-height: 400px;
+    position: relative;
+    z-index: 1;
+}
+
+/* 表格容器 */
+.table-container {
+    width: 100%;
+    height: 100%;
+    background: rgba(20, 24, 36, 0.4);
+    border: 2px solid #0080ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-shadow: 
+        var(--glow-blue),
+        inset 0 0 50px rgba(0, 128, 255, 0.1);
+    position: relative;
+    clip-path: polygon(
+        0 10px, 10px 0,
+        calc(100% - 10px) 0, 100% 10px,
+        100% calc(100% - 10px), calc(100% - 10px) 100%,
+        10px 100%, 0 calc(100% - 10px)
+    );
+}
+
+/* 容器角标装饰 */
+.table-container::before,
+.table-container::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #00ccff;
+}
+
+.table-container::before {
+    top: 8px;
+    left: 8px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.table-container::after {
+    bottom: 8px;
+    right: 8px;
+    border-left: none;
+    border-top: none;
+}
+
+/* 表格包装器 */
+.table-wrapper {
+    width: calc(100% - 24px);
+    height: calc(100% - 24px);
+    overflow: hidden;
+    border: 1px solid #2a3447;
+    background: rgba(10, 14, 26, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+/* 提示容器 */
+.toast-container {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    min-width: 250px;
+    max-width: 350px;
+    padding: 14px 20px;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--white);
+    pointer-events: auto;
+    animation: glitchIn 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid;
+    backdrop-filter: blur(10px);
+}
+
+.toast.success {
+    background: linear-gradient(135deg, rgba(0, 255, 204, 0.2), rgba(0, 255, 204, 0.1));
+    border-color: #00ffcc;
+    box-shadow: var(--glow-cyan);
+}
+
+.toast.error {
+    background: linear-gradient(135deg, rgba(255, 0, 128, 0.2), rgba(255, 0, 128, 0.1));
+    border-color: #ff0080;
+    box-shadow: var(--glow-pink);
+}
+
+.toast.warning {
+    background: linear-gradient(135deg, rgba(255, 204, 0, 0.2), rgba(255, 204, 0, 0.1));
+    border-color: #ffcc00;
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
+}
+
+.toast.info {
+    background: linear-gradient(135deg, rgba(0, 204, 255, 0.2), rgba(0, 204, 255, 0.1));
+    border-color: #00ccff;
+    box-shadow: 0 0 20px rgba(0, 204, 255, 0.6);
+}
+
+.toast::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: currentColor;
+    animation: flicker 2s infinite;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes glitchIn {
+    0% {
+        transform: translateX(-100%) skewX(-10deg);
+        opacity: 0;
+    }
+    50% {
+        transform: translateX(5%) skewX(5deg);
+    }
+    100% {
+        transform: translateX(0) skewX(0);
+        opacity: 1;
+    }
+}
+
+.toast.removing {
+    animation: glitchOut 0.5s ease forwards;
+}
+
+@keyframes glitchOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    50% {
+        transform: translateX(-5%) skewX(-5deg);
+    }
+    100% {
+        transform: translateX(100%) skewX(10deg);
+        opacity: 0;
+    }
+}
+
+/* 操作按钮通用样式 */
+.action-btn {
+    position: fixed;
+    bottom: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 0;
+    background: rgba(20, 24, 36, 0.95);
+    backdrop-filter: blur(10px);
+    border: 2px solid #0080ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    box-shadow: var(--glow-blue);
+    transition: all 0.3s ease;
+    color: #00ccff;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+}
+
+.action-btn:hover {
+    background: rgba(0, 128, 255, 0.2);
+    box-shadow: 
+        0 0 30px rgba(0, 128, 255, 0.8),
+        inset 0 0 20px rgba(0, 204, 255, 0.3);
+    border-color: #00ffcc;
+}
+
+.action-btn i {
+    font-size: 14px;
+}
+
+/* 复制按钮位置 */
+.fuzhi-btn {
+    right: 96px;
+}
+
+.fuzhi-btn:hover i {
+    animation: pulse 0.5s ease;
+}
+
+/* 下载按钮位置 */
+.xiazai-btn {
+    right: 54px;
+}
+
+.xiazai-btn:hover i {
+    animation: bounce 0.5s ease;
+}
+
+/* 设置按钮位置调整 */
+.shezhi-btn {
+    position: fixed;
+    bottom: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 0;
+    background: rgba(20, 24, 36, 0.95);
+    backdrop-filter: blur(10px);
+    border: 2px solid #0080ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    box-shadow: var(--glow-blue);
+    transition: all 0.3s ease;
+    color: #00ccff;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+}
+
+.shezhi-btn:hover {
+    background: rgba(0, 128, 255, 0.2);
+    box-shadow: 
+        0 0 30px rgba(0, 128, 255, 0.8),
+        inset 0 0 20px rgba(0, 204, 255, 0.3);
+    border-color: #00ffcc;
+}
+
+.shezhi-btn i {
+    font-size: 15px;
+    animation: rotateGear 10s linear infinite;
+}
+
+/* 按钮动画 */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+@keyframes rotateGear {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .main-container {
+        width: calc(100vw - 32px);
+        height: calc(100vh - 80px);
+        max-height: 450px;
+        min-width: 500px;
+        min-height: 350px;
+    }
+
+    .table-container {
+        padding: 10px;
+    }
+    
+    .toast-container {
+        bottom: 40px;
+        left: 20px;
+    }
+    
+    .toast {
+        min-width: 200px;
+        font-size: 13px;
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-container {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 60px);
+        max-height: 350px;
+        min-width: 360px;
+        min-height: 280px;
+    }
+
+    .table-container {
+        padding: 8px;
+    }
+    
+    .toast-container {
+        bottom: 35px;
+        left: 15px;
+    }
+    
+    .toast {
+        min-width: 180px;
+        font-size: 12px;
+        padding: 10px 14px;
+    }
+}

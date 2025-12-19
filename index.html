@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知海·Bi</title>
+    
+    <!-- 网站图标 - 使用logo.png -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <!-- 关键资源预加载 - 最高优先级 -->
+    <link rel="preload" href="texiao/texiao.css" as="style">
+    
+    <!-- 加载特效样式 - 最先引入 -->
+    <link href="texiao/texiao.css" rel="stylesheet">
+    
+    <!-- 其他样式 - 全部本地化 -->
+    <link href="waibu/fontawesome/css/all.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="biaoge/biaoge.css" rel="stylesheet">
+    <link href="shezhi/shezhi.css" rel="stylesheet">
+    <link href="shezhi/yangshi/liebiao.css" rel="stylesheet">
+    <link href="shezhi/yangshi/jisuan.css" rel="stylesheet">
+    <link href="zujian/xinxi/xinxi.css" rel="stylesheet">
+    
+    <!-- Firebase SDK - 本地文件 -->
+    <script src="waibu/firebase/firebase-app-compat.js"></script>
+    <script src="waibu/firebase/firebase-database-compat.js"></script>
+    
+    <!-- Excel处理库 - 本地文件 -->
+    <script src="waibu/xlsx/xlsx.full.min.js"></script>
+    
+    <!-- 截图库 - 本地文件 -->
+    <script src="waibu/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- 加载特效 - 外部CSS控制 -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-container">
+            <div class="loading-grid"></div>
+            <div class="loading-main">
+                <div class="progress-ring-container">
+                    <svg class="progress-ring" width="200" height="200">
+                        <circle class="progress-ring-bg" cx="100" cy="100" r="85"></circle>
+                        <circle class="progress-ring-fill" cx="100" cy="100" r="85"></circle>
+                    </svg>
+                    <div class="progress-center">
+                        <div class="progress-label">加载中</div>
+                        <div class="progress-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="loading-status">
+                    <div class="status-text">正在加载数据......</div>
+                    <div class="status-subtext" id="loadingDateTime"></div>
+                </div>
+            </div>
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+        </div>
+    </div>
+
+    <!-- 左上角实时时间：星期在前，时间在后 -->
+    <div class="info-container datetime-group">
+        <div class="info-item">
+            <span class="info-value time-value" id="clockWeek">星期一</span>
+        </div>
+        <div class="info-divider"></div>
+        <div class="info-item">
+            <span class="info-value time-value" id="clockTime">00:00:00</span>
+        </div>
+    </div>
+
+    <!-- 右上角信息条 -->
+    <div class="info-container top-info-bar">
+        <div class="info-item">
+            <span class="info-label">日期</span>
+            <span class="info-value" id="clockDate">2025/01/01</span>
+        </div>
+        <div class="info-divider"></div>
+        <div class="info-item">
+            <span class="info-label">时间进度</span>
+            <span class="info-value" id="timeProgress">0%</span>
+        </div>
+        <div class="info-divider"></div>
+        <div class="info-item">
+            <span class="info-label">人数</span>
+            <span class="info-value" id="peopleCount">0</span>
+        </div>
+        <div class="status-dot" id="statusIndicator"></div>
+    </div>
+
+    <!-- 左下角更新信息 -->
+    <div class="info-container update-info">
+        <div class="info-item">
+            <span class="info-label">数据截止</span>
+            <span class="info-value" id="dataDeadline">--</span>
+        </div>
+        <div class="info-divider"></div>
+        <div class="info-item">
+            <span class="info-label">BI·更新</span>
+            <span class="info-value" id="biUpdateTime">--</span>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <div class="table-container">
+            <div class="table-wrapper">
+                <div class="table-scroll" id="tableScroll">
+                    <table class="data-table" id="dataTable">
+                        <thead id="tableHead"></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示容器 -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- 脚本加载 - 注意顺序 -->
+    <script>
+    console.log('========================================');
+    console.log('========================================');
+    console.log('页面开始加载:', new Date().toISOString());
+    console.log('当前URL:', window.location.href);
+    console.log('用户代理:', navigator.userAgent);
+    console.log('========================================');
+    console.log('========================================');
+
+    window.addEventListener('DOMContentLoaded', () => {
+        console.log('\n=====================================');
+        console.log('[Main] DOMContentLoaded 事件触发');
+        console.log('[Main] 时间:', new Date().toISOString());
+        console.log('[Main] 开始初始化 Firebase');
+        console.log('=====================================\n');
+        
+        try {
+            FirebaseModule.init((isConnected) => {
+                console.log('[Main] Firebase 连接状态回调:', isConnected);
+                if (isConnected) {
+                    console.log('[Main] Firebase 已连接');
+                } else {
+                    console.log('[Main] Firebase 断开连接');
+                }
+            });
+        } catch (error) {
+            console.error('[Main] Firebase 初始化失败:', error);
+        }
+    });
+
+    window.addEventListener('load', () => {
+        console.log('\n=====================================');
+        console.log('[Main] window.load 事件触发');
+        console.log('[Main] 时间:', new Date().toISOString());
+        console.log('=====================================\n');
+    });
+
+    console.log('[Main] 全局脚本加载完成');
+    </script>
+    <script src="texiao/texiao.js"></script>
+    <script src="firebase.js"></script>
+    <script src="biaoge/biaoge.js"></script>
+    <script src="shezhi/gongneng/jiexi.js"></script>
+    <script src="shezhi/gongneng/jisuan/suanshu.js"></script>
+    <script src="shezhi/gongneng/jisuan/caozuo.js"></script>
+    <script src="shezhi/gongneng/liebiao.js"></script>
+    <script src="shezhi/gongneng/shangchuan.js"></script>
+    <script src="shezhi/shezhi.js"></script>
+    <script src="zujian/xiazai.js"></script>
+    <script src="zujian/fuzhi.js"></script>
+    <script src="zujian/chakan.js"></script>
+    <script src="zujian/xinxi/xinxi.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+/* 设置样式 - 重构版（移除底部应用区域） */
+
+/* 设置按钮 - 固定位置 */
+.shezhi-btn {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 0;
+    background: rgba(20, 24, 36, 0.95);
+    backdrop-filter: blur(10px);
+    border: 2px solid #0080ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    box-shadow: var(--glow-blue);
+    transition: all 0.3s ease;
+    color: #00ccff;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+
+.shezhi-btn:hover {
+    background: rgba(0, 128, 255, 0.2);
+    box-shadow: 
+        0 0 30px rgba(0, 128, 255, 0.8),
+        inset 0 0 20px rgba(0, 204, 255, 0.3);
+    border-color: #00ffcc;
+}
+
+.shezhi-btn i {
+    font-size: 15px;
+    animation: rotateGear 10s linear infinite;
+}
+
+@keyframes rotateGear {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.shezhi-btn:hover i {
+    animation-duration: 2s;
+    color: #00ffcc;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
+}
+
+/* 设置弹窗 */
+.shezhi-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: none;
+}
+
+.shezhi-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: modalGlitch 0.3s ease;
+}
+
+@keyframes modalGlitch {
+    0% {
+        opacity: 0;
+        filter: blur(10px);
+    }
+    33% {
+        opacity: 0.5;
+        filter: blur(5px) hue-rotate(180deg);
+    }
+    66% {
+        opacity: 0.8;
+        filter: blur(2px) hue-rotate(90deg);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0) hue-rotate(0);
+    }
+}
+
+.shezhi-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.shezhi-content {
+    position: relative;
+    width: 700px;
+    height: 500px;
+    background: linear-gradient(135deg, rgba(20, 24, 36, 0.98) 0%, rgba(26, 31, 46, 0.98) 100%);
+    border: 2px solid #0080ff;
+    box-shadow: 
+        0 0 50px rgba(0, 128, 255, 0.5),
+        inset 0 0 30px rgba(0, 128, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: contentSlide 0.4s ease;
+    clip-path: polygon(
+        0 20px, 20px 0,
+        calc(100% - 20px) 0, 100% 20px,
+        100% calc(100% - 20px), calc(100% - 20px) 100%,
+        20px 100%, 0 calc(100% - 20px)
+    );
+}
+
+@keyframes contentSlide {
+    from {
+        transform: translateY(-100%) skewY(5deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) skewY(0);
+        opacity: 1;
+    }
+}
+
+/* 标题栏 */
+.shezhi-header {
+    height: 50px;
+    padding: 0 20px;
+    border-bottom: 2px solid #0080ff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, rgba(0, 128, 255, 0.1) 0%, transparent 50%, rgba(0, 128, 255, 0.1) 100%);
+    position: relative;
+}
+
+.shezhi-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ffcc, transparent);
+    animation: scanLine 3s linear infinite;
+}
+
+@keyframes scanLine {
+    0% { left: -100px; }
+    100% { left: 100%; }
+}
+
+.shezhi-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #00ccff;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+}
+
+.shezhi-close {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #b4c2e0;
+    cursor: pointer;
+    border: 1px solid #6b7c9b;
+    background: rgba(107, 124, 155, 0.1);
+    transition: all 0.2s;
+}
+
+.shezhi-close:hover {
+    background: rgba(180, 194, 224, 0.2);
+    box-shadow: 0 0 20px rgba(180, 194, 224, 0.4);
+    color: #ffffff;
+    border-color: #b4c2e0;
+}
+
+/* 主体区域 - 占满剩余空间 */
+.shezhi-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            rgba(0, 128, 255, 0.03) 0px,
+            transparent 1px,
+            transparent 2px,
+            rgba(0, 128, 255, 0.03) 3px
+        );
+}
+
+/* 左侧列表区域 */
+.shezhi-left {
+    width: 250px;
+    border-right: 2px solid #0080ff;
+    display: flex;
+    flex-direction: column;
+    background: rgba(10, 14, 26, 0.5);
+    position: relative;
+}
+
+.shezhi-left::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, #0080ff, #00ccff, #0080ff);
+    animation: verticalGlow 3s linear infinite;
+}
+
+@keyframes verticalGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* 右侧公式区域 - 占满剩余空间 */
+.shezhi-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgba(10, 14, 26, 0.3);
+    position: relative;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .shezhi-content {
+        width: 90vw;
+        height: 80vh;
+        max-width: 600px;
+        max-height: 500px;
+    }
+    
+    .shezhi-left {
+        width: 220px;
+    }
+}
