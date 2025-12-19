@@ -171,6 +171,7 @@ body::after {
     text-transform: uppercase;
     letter-spacing: 1px;
     border: 1px solid;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
 
@@ -397,4 +398,5 @@ body::after {
         font-size: 12px;
         padding: 10px 14px;
     }
+
 }
