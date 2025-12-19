@@ -22,6 +22,7 @@ const ChakanModule = (function() {
                 height: 32px;
                 border-radius: 0;
                 background: rgba(20, 24, 36, 0.95);
+                -webkit-backdrop-filter: blur(10px);
                 backdrop-filter: blur(10px);
                 border: 2px solid #0080ff;
                 display: flex;
@@ -267,4 +268,5 @@ const ChakanModule = (function() {
         isFullscreen: () => isFullscreen,
         exit: exitFullscreen
     };
+
 })();
